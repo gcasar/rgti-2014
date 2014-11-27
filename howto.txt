@@ -1,0 +1,18 @@
+howto.txt
+
+#povezi na server:
+
+ssh root@188.226.186.216
+#geslo: zelo dobro geslo
+
+#nadaljuj sejo
+screen -R 
+
+#ce laufa server (waiting... nek tazga) ga ubijes ctrl+c
+#povleces novo kodo
+git pull
+
+#zalavfas server nazaj
+grunt serve
+
+#pol pa sam zapres terminal
