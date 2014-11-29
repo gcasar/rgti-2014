@@ -158,7 +158,7 @@ require([
 		result.scene.add(camera);
 
 
-		var object, geometry, material, light, count = 500, range = 200;
+		var object, geometry, material, light, count = 100, range = 200;
 
 		material = new THREE.MeshLambertMaterial( { color:0xffffff } );
 		geometry = new THREE.BoxGeometry( 5, 5, 5 );
