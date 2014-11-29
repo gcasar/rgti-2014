@@ -3,6 +3,9 @@ var box2d = require('./Box2dWeb-2.1.a.3');
 var vectors = require('gamejs/utils/vectors');
 var math = require('gamejs/utils/math');
 
+var SERVER = "ws://188.226.186.216:1337";
+
+
 var STEER_NONE=0;
 var STEER_RIGHT=1;
 var STEER_LEFT=2;
@@ -11,22 +14,74 @@ var ACC_NONE=0;
 var ACC_ACCELERATE=1;
 var ACC_BRAKE=2;
 
-var WIDTH_PX=600;   //screen width in pixels
-var HEIGHT_PX=400; //screen height in pixels
+var WIDTH_PX=800;   //screen width in pixels
+var HEIGHT_PX=600; //screen height in pixels
 var SCALE=15;      //how many pixels in a meter
 var WIDTH_M=WIDTH_PX/SCALE; //world width in meters. for this example, world is as large as the screen
 var HEIGHT_M=HEIGHT_PX/SCALE; //world height in meters
 var KEYS_DOWN={}; //keep track of what keys are held down by the player
 var b2world;
 
-//initialize font to draw text with
-var font=new gamejs.font.Font('16px Sans-serif');
 
 //key bindings
 var BINDINGS={accelerate:gamejs.event.K_UP, 
               brake:gamejs.event.K_DOWN,      
               steer_left:gamejs.event.K_LEFT, 
                steer_right:gamejs.event.K_RIGHT}; 
+
+var websocket;
+
+var logDom;
+
+function init() { 
+    logDom = document.getElementById("output");
+    testWebSocket(); 
+}  
+
+function testWebSocket() { 
+    websocket = new WebSocket(SERVER); 
+    websocket.onopen = function(evt) { 
+        onOpen(evt) 
+    }; 
+    websocket.onclose = function(evt) { 
+        onClose(evt) 
+    }; 
+    websocket.onmessage = function(evt) { 
+        onMessage(evt) 
+    }; 
+    websocket.onerror = function(evt) { 
+        onError(evt) 
+    };
+}  
+
+function onOpen(evt) { 
+    writeToScreen("CONNECTED"); 
+    doSend("WebSocket rocks"); 
+}  
+
+function onClose(evt) { 
+    writeToScreen("DISCONNECTED");
+}  
+
+function onMessage(evt) { 
+    writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>'); 
+    websocket.close(); 
+}  
+
+function onError(evt) { 
+    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data); 
+}  
+
+function doSend(message) { 
+    writeToScreen("SENT: " + message);  websocket.send(message); 
+}  
+
+function writeToScreen(message) { 
+    var pre = document.createElement("p"); 
+    pre.style.wordWrap = "break-word"; 
+    pre.innerHTML = message; output.appendChild(pre); 
+}  
+
 
 
 var BoxProp = function(pars){
@@ -335,6 +390,12 @@ function main(){
     debugDraw.SetLineThickness(1.0);
     debugDraw.SetFlags(box2d.b2DebugDraw.e_shapeBit);
     b2world.SetDebugDraw(debugDraw);
+
+    init();
+
+
+    var cars = [];
+
     
     //initialize car
     var car=new Car({'width':2,
@@ -348,7 +409,8 @@ function main(){
                                 {'x':1, 'y':-1.2, 'width':0.4, 'length':0.8, 'revolving':true, 'powered':true}, //top right
                                 {'x':-1, 'y':1.2, 'width':0.4, 'length':0.8, 'revolving':false, 'powered':false}, //back left
                                 {'x':1, 'y':1.2, 'width':0.4, 'length':0.8, 'revolving':false, 'powered':false}]}); //back right
-    
+  
+    cars["demo"] = car;
     //initialize some props to bounce against
     var props=[];
     
@@ -369,23 +431,25 @@ function main(){
         
         //set car controls according to player input
         if(KEYS_DOWN[BINDINGS.accelerate]){
-            car.accelerate=ACC_ACCELERATE;
+            cars["demo"].accelerate=ACC_ACCELERATE;
         }else if(KEYS_DOWN[BINDINGS.brake]){
-            car.accelerate=ACC_BRAKE;
+            cars["demo"].accelerate=ACC_BRAKE;
         }else{
-            car.accelerate=ACC_NONE;
+            cars["demo"].accelerate=ACC_NONE;
         }
         
         if(KEYS_DOWN[BINDINGS.steer_right]){
-            car.steer=STEER_RIGHT;
+            cars["demo"].steer=STEER_RIGHT;
         }else if(KEYS_DOWN[BINDINGS.steer_left]){
-            car.steer=STEER_LEFT;
+            cars["demo"].steer=STEER_LEFT;
         }else{
-            car.steer=STEER_NONE;
+            cars["demo"].steer=STEER_NONE;
         }
         
         //update car
-        car.update(msDuration);
+        for(var c in cars){
+            cars[c].update(msDuration);
+        }
         
         //update physics world
         b2world.Step(msDuration/1000, 10, 8);        
@@ -398,10 +462,7 @@ function main(){
         
         //let box2d draw it's bodies
         b2world.DrawDebugData();
-        
-        //fps and car speed display
-        display.blit(font.render('FPS: '+parseInt((1000)/msDuration)), [25, 25]);
-        display.blit(font.render('SPEED: '+parseInt(Math.ceil(car.getSpeedKMH()))+' km/h'), [25, 55]);
+
         return;
     };
     function handleEvent(event){
