@@ -33,7 +33,9 @@ var config = {
 
     //
     stats: 'lib/stats.min',
-  }
+  },
+
+  WS_PORT: 9999
 };
 
 require.config(config);
