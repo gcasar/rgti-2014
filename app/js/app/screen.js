@@ -31,7 +31,7 @@ require.config({
 
 //todo: enotni config fajli
 var URL = 'ws://rgti.bigbuckduck.com';
-var DEBUG = 'ws://localhost';
+var DEBUG = URL;//'ws://localhost';
 var PORT = 9999;
 
 define(["underscore", "backbone"], function(_, Backbone) {
