@@ -37,9 +37,17 @@ var PORT = 9999;
 define(["underscore", "backbone"], function(_, Backbone) {
   var socket = null;
 
+  var cbck = null;
+
 return {
-    connect: function(cbck){
+    connect: function(_cbck){
       socket = new WebSocket(DEBUG+':'+PORT+'/');
+
+      if(_cbck===undefined){
+        cbck = function(e,p){};
+      }else{
+        cbck = _cbck;
+      }
 
       socket.onopen = function(evt) { 
         console.log("OnOpen "+evt);
@@ -56,7 +64,7 @@ return {
         console.log("MSG: "+evt.data);
         payload = JSON.parse(evt.data);
         if(payload.action!==undefined){
-          cbck(payload.action);
+          cbck(payload.action,payload.id);
         }else{
           console.log("Error, bad type");
         }

@@ -24,31 +24,48 @@ wss.on('connection', function connection(ws) {
  		if(payload.type==='remote'){
  			if(target===null){
  				console.log("Client tried connecting as remote, but there is no target.");
- 				ws.send(JSON.stringify({'error':'No screen'}));
- 				ws.close();
- 			}else{
+ 				try{
+	 				ws.send(JSON.stringify({'error':'No screen'}));
+	 				ws.close();
+	 			}catch(e){
+	 				console.log(e);
+	 			}
+ 			}else if(payload.action===undefined){
  				count++;
 				ws.send(JSON.stringify({'id':count}));
 				id = count;
 
 				console.log("["+id+"] Connected as remote! ");
 
+				try{
+	 				target.send(JSON.stringify({'action':'hello','id':id}));
+	 			}catch(e){
+	 				console.log(e);
+	 			}
+
 				clients[id] = ws;
 				ws._id = id;
  			}
 
  		}else if(payload.type==='screen'){
+ 			console.log("Connected as screen");
  			closeScreen();
  			id = "SCREEN";
  			ws._id = id;
  			target = ws;
- 		}else{
+ 		}else if(payload.type===undefined){
  			if(payload.action!==undefined){
  				if(target===null){
  					closeRemote(ws,'No screen');
  				}else{
  					//todo parse!
- 					target.send(message);
+
+				console.log("["+id+"] sending ");
+					try{
+ 						target.send(message);
+ 					}catch(e){
+ 						console.log(e);
+ 					}
  				}
  			}else{
 
@@ -61,23 +78,42 @@ wss.on('connection', function connection(ws) {
 	ws.on('error', function error(){
 		console.log("["+id+"] Error! ");
 		clients[id] = undefined;
+		if(id!=="SCREEN"){
+			notifyScreen(id);
+		}
 	});
 
 	ws.on('close', function close(){
 		console.log("["+id+"] Closed! ");
 		if(id=="SCREEN"){
 			closeScreen();
+		}else{
+			notifyScreen(id);
 		}
 		clients[id] = undefined;
 	});
 });
 
+function notifyScreen(id){
+	try{
+		target.send(JSON.stringify({'action':'bye','id':id}));
+	}catch(e){
+		console.log(e);
+	}
+
+}
+
 function closeRemote(client, reason){
 	if(client!==undefined){
 		console.log("["+client._id+"] Closing remote ("+reason+")");
-		clients[id] = undefined;
-		client.send(JSON.stringify({'error':'"+reason+"'}));
-		client.close();
+		clients[client._id] = undefined;
+		try{
+			client.send(JSON.stringify({'error':'"+reason+"'}));
+			client.close();
+		}catch(e){
+			console.log(e);
+		}
+		
 	}
 }
 
@@ -89,5 +125,6 @@ function closeScreen(){
 			var client = clients[key];
 			closeRemote(client, 'Screen closed');
 		}
+		target = null;
 	}
 }

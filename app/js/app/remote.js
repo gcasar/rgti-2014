@@ -31,24 +31,33 @@ require.config({
 
 //todo: enotni config fajli
 var URL = 'ws://rgti.bigbuckduck.com';
-var DEBUG = 'ws://localhost';
+var DEBUG = URL;//'ws://localhost';
 var PORT = 9999;
 
 define(["underscore", "backbone"], function(_, Backbone) {
   var socket = null;
   var id = null;
+  var cbck = null;
 
 return {
-    connect: function(){
+    connect: function(_cbck){
       socket = new WebSocket(DEBUG+':'+PORT+'/');
+
+      if(_cbck===undefined){
+        cbck = function(e,p){};
+      }else{
+        cbck = _cbck;
+      }
 
       socket.onopen = function(evt) { 
         console.log("OnOpen "+evt);
         socket.send(JSON.stringify({'type':'remote'}));
+        cbck("open");
       }; 
 
       socket.onclose = function(evt) { 
         console.log("OnClose "+evt);
+        cbck("close");
       };
 
       socket.onmessage = function(evt) { 
@@ -57,6 +66,7 @@ return {
         if(payload.id!==undefined){
           id = payload.id;
           console.log("Connected as "+id);
+          cbck("connected");
         }else{
           console.log("Error, bad type");
         }
@@ -65,13 +75,14 @@ return {
 
       socket.onerror = function(evt) { 
         console.log("Error: "+evt);
+        cbck("error");
       };
 
     },
 
     action: function(type){
       if(socket!==null){
-        socket.send(JSON.stringify({'action':'"+type+"', 'id':'"+id+"'}));
+        socket.send(JSON.stringify({'action':type, 'id':id}));
       }
     }
 
