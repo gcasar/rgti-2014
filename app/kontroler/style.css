@@ -1,0 +1,33 @@
+#levo{
+    background: url(levo.png);     
+    background-repeat: no-repeat;                
+    height: 100px; 
+    width: 100px;            
+    position: absolute;
+    top: 50%; left: 60%;
+}
+#desno{
+    background: url(desno.png);     
+    background-repeat: no-repeat;                
+    height: 100px; 
+    width: 100px;  
+    position: absolute;
+    top: 50%; left: 80%;
+}
+#gor{
+    background: url(gor.png);     
+    background-repeat: no-repeat;                
+    height: 100px; 
+    width: 100px;  
+    position: absolute;
+    top: 40%; left: 10%;
+}
+#dol{
+    background: url(dol.png);     
+    background-repeat: no-repeat;                
+    height: 100px; 
+    width: 100px;  
+    position: absolute;
+    top: 60%; left: 10%;
+}
+
