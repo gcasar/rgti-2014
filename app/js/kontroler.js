@@ -64,6 +64,38 @@ require([
 
 		init();
 	    
+		$("#gor").mousedown(function(){
+       		KEYS_DOWN['up'] = true;
+       		parsekeys();
+		});
+		$("#gor").mouseup(function(){
+			KEYS_DOWN['up'] = false;
+       		parsekeys();
+		});
+		$("#dol").mousedown(function(){
+			KEYS_DOWN['down'] = true;
+       		parsekeys();
+		});
+		$("#dol").mousedown(function(){
+			KEYS_DOWN['down'] = false;
+       		parsekeys();
+		});
+		$("#levo").mousedown(function(){
+			KEYS_DOWN['left'] = true;
+       		parsekeys();
+		});
+		$("#levo").mousedown(function(){
+			KEYS_DOWN['left'] = false;
+       		parsekeys();
+		});
+		$("#desno").mousedown(function(){
+			KEYS_DOWN['right'] = true;
+       		parsekeys();
+		});
+		$("#desno").mouseup(function(){
+			KEYS_DOWN['right'] = false;
+       		parsekeys();
+		});
 	});
 
 
