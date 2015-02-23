@@ -1,47 +1,57 @@
-//
-
-require.config({
-  // The shim config allows us to configure dependencies for
-  // scripts that do not call define() to register a module
+// Configure Require.js
+var config = {
   shim: {
-    'underscore': {
-      exports: '_'
-    },
-
     'socketio': {
       exports: 'io'
     },
-
+    'underscore': {
+      exports: '_'
+    },
     'backbone': {
       deps: [
         'underscore',
         'jquery'
       ],
       exports: 'Backbone'
-    }
+    },
+    'stats': { exports: 'Stats' },
+    // --- Use shim to mix together all THREE.js subcomponents
+    'threeCore': { exports: 'THREE' },
+    'BinaryLoader': { deps: ['threeCore'], exports: 'THREE' },
   },
   paths: {
-
-    socketio: 'lib/socketio',
     jquery: 'lib/jquery',
+    socketio: 'lib/socketio',
     underscore: 'lib/underscore',
-    backbone: 'lib/backbone'
+    backbone: 'lib/backbone',
+    box2d: 'lib/box2d',
+    gamejs: 'lib/gamejs.min',
+
+    three: 'lib/three',
+    threeCore: 'lib/three.min',
+    BinaryLoader: 'lib/loaders/BinaryLoader',
+    shaders: 'shaders',
+
+    //
+    stats: 'lib/stats.min',
   }
-});
+};
 
-//todo: enotni config fajli
-var URL = 'ws://rgti.bigbuckduck.com';
-var DEBUG = 'ws://localhost';
-var PORT = 9999;
+require.config(config);
 
-define(["underscore", "backbone"], function(_, Backbone) {
-  var socket = null;
-  var id = null;
-  var cbck = null;
 
-return {
-    connect: function(_cbck){
-      socket = new WebSocket(DEBUG+':'+PORT+'/');
+
+require([
+	'config',
+	'jquery'
+], function( CONFIG, $) {
+	var cbck = null;
+	var socket = null;
+
+	connect();
+
+	function connect(_cbck){
+      socket = new WebSocket('ws://'+CONFIG.SERVER_URL+':'+CONFIG.SERVER_PORT+'/');
 
       if(_cbck===undefined){
         cbck = function(e,p){};
@@ -78,9 +88,9 @@ return {
         cbck("error");
       };
 
-    },
+    }
 
-    action: function(type){
+    var action = function(type){
       if(socket!==null){
 
         console.log("action "+type);
@@ -88,4 +98,4 @@ return {
       }
     }
 
-}});
+});
