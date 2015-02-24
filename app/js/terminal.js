@@ -47,6 +47,7 @@ require([
 ], function( CONFIG, $) {
 	var cbck = null;
 	var socket = null;
+  var circles=[];
 
 	connect();
 
@@ -77,9 +78,13 @@ require([
           id = payload.id;
           console.log("Connected as "+id);
           cbck("connected");
+        }else if(payload.action==="dif"){
+          circles=payload.data;
+          drawCircles(circles);
         }else{
           console.log("Error, bad type");
         }
+
 
       };
 
@@ -95,6 +100,24 @@ require([
 
         console.log("action "+type);
         socket.send(JSON.stringify({'action':type, 'id':id}));
+      }
+    }
+
+    function drawCircles(circles){
+      var canvas = $("#canvas")[0];
+      var ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for(var k in circles){
+        var centerX = circles[k][0];
+        var centerY = circles[k][1];
+        var radius= 35;
+        ctx.beginPath();
+        ctx.fillStyle = "#600000";
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+        ctx.closePath();
+        ctx.fill();
+
       }
     }
 

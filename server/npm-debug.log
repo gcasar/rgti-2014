@@ -1,0 +1,86 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 warn package.json rgti-serve@0.0.1 No repository field.
+5 warn package.json rgti-serve@0.0.1 No README data
+6 verbose readDependencies using package.json deps
+7 verbose install where, deps [ '/Users/gasperbavdek/Desktop/Faks/RGTI/Seminarska/server',
+7 verbose install   [ 'ws', 'requirejs' ] ]
+8 info preinstall rgti-serve@0.0.1
+9 verbose readDependencies using package.json deps
+10 verbose already installed skipping ws@0.5.0 /Users/gasperbavdek/Desktop/Faks/RGTI/Seminarska/server
+11 verbose cache add [ 'requirejs@0.2.6', null ]
+12 verbose cache add name=undefined spec="requirejs@0.2.6" args=["requirejs@0.2.6",null]
+13 verbose parsed url { protocol: null,
+13 verbose parsed url   slashes: null,
+13 verbose parsed url   auth: null,
+13 verbose parsed url   host: null,
+13 verbose parsed url   port: null,
+13 verbose parsed url   hostname: null,
+13 verbose parsed url   hash: null,
+13 verbose parsed url   search: null,
+13 verbose parsed url   query: null,
+13 verbose parsed url   pathname: 'requirejs@0.2.6',
+13 verbose parsed url   path: 'requirejs@0.2.6',
+13 verbose parsed url   href: 'requirejs@0.2.6' }
+14 verbose cache add name="requirejs" spec="0.2.6" args=["requirejs","0.2.6"]
+15 verbose parsed url { protocol: null,
+15 verbose parsed url   slashes: null,
+15 verbose parsed url   auth: null,
+15 verbose parsed url   host: null,
+15 verbose parsed url   port: null,
+15 verbose parsed url   hostname: null,
+15 verbose parsed url   hash: null,
+15 verbose parsed url   search: null,
+15 verbose parsed url   query: null,
+15 verbose parsed url   pathname: '0.2.6',
+15 verbose parsed url   path: '0.2.6',
+15 verbose parsed url   href: '0.2.6' }
+16 verbose addNamed [ 'requirejs', '0.2.6' ]
+17 verbose addNamed [ '0.2.6', '0.2.6' ]
+18 silly lockFile 9fc8b1aa-requirejs-0-2-6 requirejs@0.2.6
+19 verbose lock requirejs@0.2.6 /Users/gasperbavdek/.npm/9fc8b1aa-requirejs-0-2-6.lock
+20 verbose request where is /requirejs
+21 verbose request registry https://registry.npmjs.org/
+22 verbose request id 937c5e0994ed5574
+23 verbose url raw /requirejs
+24 verbose url resolving [ 'https://registry.npmjs.org/', './requirejs' ]
+25 verbose url resolved https://registry.npmjs.org/requirejs
+26 verbose request where is https://registry.npmjs.org/requirejs
+27 info trying registry request attempt 1 at 10:46:09
+28 verbose etag "7O1EJ4MB52JFMDSSA0B0UIQ83"
+29 http GET https://registry.npmjs.org/requirejs
+30 http 304 https://registry.npmjs.org/requirejs
+31 silly registry.get cb [ 304,
+31 silly registry.get   { date: 'Tue, 24 Feb 2015 09:46:09 GMT',
+31 silly registry.get     server: 'Apache',
+31 silly registry.get     via: '1.1 varnish',
+31 silly registry.get     'last-modified': 'Tue, 24 Feb 2015 09:45:50 GMT',
+31 silly registry.get     'cache-control': 'max-age=60',
+31 silly registry.get     etag: '"7O1EJ4MB52JFMDSSA0B0UIQ83"',
+31 silly registry.get     age: '47',
+31 silly registry.get     'x-served-by': 'cache-fra1234-FRA',
+31 silly registry.get     'x-cache': 'HIT',
+31 silly registry.get     'x-cache-hits': '2',
+31 silly registry.get     'x-timer': 'S1424771169.534137,VS0,VE0',
+31 silly registry.get     vary: 'Accept',
+31 silly registry.get     'content-length': '0',
+31 silly registry.get     'keep-alive': 'timeout=10, max=50',
+31 silly registry.get     connection: 'Keep-Alive' } ]
+32 verbose etag https://registry.npmjs.org/requirejs from cache
+33 silly lockFile 9fc8b1aa-requirejs-0-2-6 requirejs@0.2.6
+34 silly lockFile 9fc8b1aa-requirejs-0-2-6 requirejs@0.2.6
+35 error Error: version not found: requirejs@0.2.6
+35 error     at /usr/local/lib/node_modules/npm/lib/cache/add-named.js:125:12
+35 error     at saved (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/get.js:167:7)
+35 error     at Object.oncomplete (fs.js:107:15)
+36 error If you need help, you may report this *entire* log,
+36 error including the npm and node versions, at:
+36 error     <http://github.com/npm/npm/issues>
+37 error System Darwin 13.4.0
+38 error command "node" "/usr/local/bin/npm" "install"
+39 error cwd /Users/gasperbavdek/Desktop/Faks/RGTI/Seminarska/server
+40 error node -v v0.10.33
+41 error npm -v 1.4.28
+42 verbose exit [ 1, true ]
